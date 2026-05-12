@@ -1,15 +1,16 @@
 export class Player {
     constructor(game) {
         this.game = game;
-        this.width = 100;
-        this.height = 93.2;
-        this.x = 0;
-        this.y = 100;
+        this.width = 50;
+        this.height = 50;
+        this.x = 250;
+        this.y = 400;
     }
     update(){
 
     }
-    draw(context){
+    draw(context) {
+        context.fillStyle = "red"
         context.fillRect(this.x, this.y, this.width, this.height);
     }
 }
