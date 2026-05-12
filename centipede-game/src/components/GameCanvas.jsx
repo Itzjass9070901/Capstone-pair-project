@@ -1,20 +1,29 @@
 import { useEffect, useRef } from "react";
-import Game from "../engine/Game";
+import { Game } from "../engine/Game";
 
-export default function GameCanvas() {
+export function GameCanvas() {
   const canvasRef = useRef(null);
+  const gameRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    const game = new Game(canvas);
-
-    game.start();
+    const ctx = canvas.getContext("2d");
+    gameRef.current = new Game(canvas, ctx);
+    gameRef.current.start();
 
     return () => {
-      game.stop();
+      gameRef.current?.stop();
     };
   }, []);
 
-  return <canvas ref={canvasRef} width={1000} height={700} />;
+  return (
+    <canvas
+      ref={canvasRef}
+      width={800}
+      height={600}
+      style={{ border: "1px solid white", background: "black" }}
+    />
+  );
 }
