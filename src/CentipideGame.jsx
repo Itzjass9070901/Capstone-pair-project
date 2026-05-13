@@ -374,13 +374,6 @@ function CentipedeCanvas() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <h1 className="text-4xl font-bold tracking-widest text-green-400">
-        Atari Centipede Clone
-      </h1>
-
-      <div className="text-sm text-green-300 font-mono text-center">
-        Arrow Keys = Move • Space = Shoot
-      </div>
 
       <canvas
         ref={canvasRef}
