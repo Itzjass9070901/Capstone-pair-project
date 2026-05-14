@@ -12,7 +12,7 @@ window.addEventListener('load', function () {
         this.player = new Player(this);
         }
         update(){
-
+            
         }
         draw(context){
             this.player.draw(context);
