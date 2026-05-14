@@ -9,6 +9,8 @@ export default function CentipedeGame() {
 import React, { useEffect, useRef, useState } from "react";
 
 function CentipedeCanvas() {
+  let lastShotTime = 0;
+  const SHOOT_COOLDOWN = 180; // milliseconds
   const canvasRef = useRef(null);
   const animationRef = useRef();
 
@@ -72,6 +74,14 @@ function CentipedeCanvas() {
     }
 
     function shoot() {
+      const now = Date.now();
+
+      if (now - lastShotTime < SHOOT_COOLDOWN) {
+        return;
+      }
+
+      lastShotTime = now;
+
       bullets.push({
         x: player.x + player.width / 2 - 2,
         y: player.y,
@@ -176,20 +186,20 @@ function CentipedeCanvas() {
         }
 
         if (!bulletRemoved && rectsCollide(bullet, spider)) {
-  spider.x = Math.random() > 0.5 ? 0 : WIDTH - 40;
-  spider.y = HEIGHT - 200 + Math.random() * 120;
+          spider.x = Math.random() > 0.5 ? 0 : WIDTH - 40;
+          spider.y = HEIGHT - 200 + Math.random() * 120;
 
-  // Make spider move inward from the side it spawned on
-  spider.vx = spider.x === 0 ? 4 : -4;
+          // Make spider move inward from the side it spawned on
+          spider.vx = spider.x === 0 ? 4 : -4;
 
-  // Random vertical movement
-  spider.vy = (Math.random() > 0.5 ? 1 : -1) * 2;
+          // Random vertical movement
+          spider.vy = (Math.random() > 0.5 ? 1 : -1) * 2;
 
-  bulletRemoved = true;
-  bullets.splice(bulletIndex, 1);
+          bulletRemoved = true;
+          bullets.splice(bulletIndex, 1);
 
-  setScore((s) => s + 75);
-}
+          setScore((s) => s + 75);
+        }
       });
 
       if (Math.random() < 0.002 && !flea) {
@@ -365,7 +375,7 @@ function CentipedeCanvas() {
 
       keys[e.key] = true;
 
-      if (e.key === " ") {
+      if (e.key === " " && !e.repeat) {
         shoot();
       }
     };
@@ -388,7 +398,6 @@ function CentipedeCanvas() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-
       <canvas
         ref={canvasRef}
         width={700}
