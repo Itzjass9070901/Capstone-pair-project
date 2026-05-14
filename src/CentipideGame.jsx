@@ -59,14 +59,14 @@ function CentipedeCanvas() {
     let spider = {
       x: WIDTH,
       y: HEIGHT - 200,
-      vx: -4,
+      vx: 1,
       vy: 2,
     };
 
     function spawnFlea() {
       flea = {
         x: Math.random() * (WIDTH - 20),
-        y: -20,
+        y: -150,
         speed: 4,
       };
     }
@@ -176,12 +176,20 @@ function CentipedeCanvas() {
         }
 
         if (!bulletRemoved && rectsCollide(bullet, spider)) {
-          spider.x = WIDTH;
-          spider.y = HEIGHT - 200;
-          bulletRemoved = true;
-          bullets.splice(bulletIndex, 1);
-          setScore((s) => s + 75);
-        }
+  spider.x = Math.random() > 0.5 ? 0 : WIDTH - 40;
+  spider.y = HEIGHT - 200 + Math.random() * 120;
+
+  // Make spider move inward from the side it spawned on
+  spider.vx = spider.x === 0 ? 4 : -4;
+
+  // Random vertical movement
+  spider.vy = (Math.random() > 0.5 ? 1 : -1) * 2;
+
+  bulletRemoved = true;
+  bullets.splice(bulletIndex, 1);
+
+  setScore((s) => s + 75);
+}
       });
 
       if (Math.random() < 0.002 && !flea) {
@@ -207,8 +215,14 @@ function CentipedeCanvas() {
       spider.x += spider.vx;
       spider.y += spider.vy;
 
-      if (spider.x < 0 || spider.x > WIDTH - 40) {
-        spider.vx *= -1;
+      if (spider.x <= 0) {
+        spider.x = 0;
+        spider.vx = Math.abs(spider.vx);
+      }
+
+      if (spider.x >= WIDTH - 40) {
+        spider.x = WIDTH - 40;
+        spider.vx = -Math.abs(spider.vx);
       }
 
       if (spider.y < HEIGHT - 260 || spider.y > HEIGHT - 80) {
